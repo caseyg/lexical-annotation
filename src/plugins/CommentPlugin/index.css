@@ -58,7 +58,31 @@ i.add-comment {
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   z-index: 24;
-  animation: show-input-box 0.4s ease;
+  opacity: 0;
+  animation: fade-in 0.15s ease forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* When being removed, add fade-out animation */
+.CommentPlugin_CommentInputBox.removing {
+  animation: fade-out 0.15s ease forwards;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 .CommentPlugin_CommentInputBox::before {
@@ -76,17 +100,6 @@ i.add-comment {
   transform-origin: 0 0;
   transform: rotate(135deg);
   box-shadow: -3px 3px 3px 0 rgba(0, 0, 0, 0.05);
-}
-
-@keyframes show-input-box {
-  0% {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .CommentPlugin_CommentInputBox_Buttons {
