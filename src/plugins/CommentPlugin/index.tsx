@@ -571,17 +571,6 @@ function CommentsPanelListComment({
 
   return (
     <li className="CommentPlugin_CommentsPanel_List_Comment">
-      <div className="CommentPlugin_CommentsPanel_List_Details">
-        <span className="CommentPlugin_CommentsPanel_List_Comment_Author">
-          {comment.author}
-        </span>
-        <span className="CommentPlugin_CommentsPanel_List_Comment_Time">
-          · {getRelativeTimeString(comment.timeStamp, rtf)}
-        </span>
-      </div>
-      <p className={comment.deleted ? 'CommentPlugin_CommentsPanel_DeletedComment' : ''}>
-        {comment.content}
-      </p>
       {comment.tags && comment.tags.length > 0 && (
         <div className="CommentPlugin_CommentsPanel_List_Tags">
           {comment.tags.map((tag) => (
@@ -591,6 +580,9 @@ function CommentsPanelListComment({
           ))}
         </div>
       )}
+      <p className={comment.deleted ? 'CommentPlugin_CommentsPanel_DeletedComment' : ''}>
+        {comment.content}
+      </p>
       {!comment.deleted && (
         <>
           <Button
@@ -738,7 +730,7 @@ function CommentsPanelList({
                 <CommentsComposer
                   submitAddComment={submitAddComment}
                   thread={commentOrThread}
-                  placeholder="Reply to comment..."
+                  placeholder="Add a note..."
                 />
               </div>
             </li>
