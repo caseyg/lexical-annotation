@@ -393,6 +393,7 @@ function CommentInputBox({
               minHeight: '32px',
               backgroundColor: 'var(--background)',
               borderColor: 'var(--border)',
+              margin: '10px',
             }),
             menu: (base) => ({
               ...base,
