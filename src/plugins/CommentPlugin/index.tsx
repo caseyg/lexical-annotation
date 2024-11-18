@@ -390,10 +390,36 @@ function CommentInputBox({
             menu: (base) => ({
               ...base,
               backgroundColor: 'var(--background)',
+              zIndex: 25,
+              border: '1px solid var(--border)',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            }),
+            menuList: (base) => ({
+              ...base,
+              backgroundColor: 'var(--background)',
             }),
             option: (base, state) => ({
               ...base,
               backgroundColor: state.isFocused ? 'var(--accent)' : 'transparent',
+              '&:hover': {
+                backgroundColor: 'var(--accent)',
+              },
+              color: 'var(--text)',
+            }),
+            multiValue: (base) => ({
+              ...base,
+              backgroundColor: 'var(--accent-light)',
+            }),
+            multiValueLabel: (base) => ({
+              ...base,
+              color: 'var(--text)',
+            }),
+            multiValueRemove: (base) => ({
+              ...base,
+              '&:hover': {
+                backgroundColor: 'var(--accent)',
+                color: 'var(--text)',
+              },
             }),
           }}
         />

@@ -7,6 +7,15 @@
  *
  */
 
+:root {
+  --background: #ffffff;
+  --text: #000000;
+  --border: #cccccc;
+  --border-hover: #888888;
+  --accent: rgba(66, 135, 245, 0.1);
+  --accent-light: rgba(66, 135, 245, 0.1);
+}
+
 .CommentPlugin_AddCommentBox {
   display: block;
   position: fixed;
@@ -54,7 +63,7 @@ i.add-comment {
   position: absolute;
   width: 250px;
   min-height: 80px;
-  background-color: #fff;
+  background-color: var(--background);
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   z-index: 24;
@@ -477,7 +486,9 @@ i.send {
 }
 
 .comment-tags-select {
-  width: 100%;
+  position: relative;
+  z-index: 26;
+  margin-bottom: 8px;
 }
 
 .comment-submit-button {
