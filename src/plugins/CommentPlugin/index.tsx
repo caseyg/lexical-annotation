@@ -225,6 +225,22 @@ function CommentInputBox({
   const selectionRef = useRef<RangeSelection | null>(null);
   const author = useCollabAuthorName();
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        if (canSubmit) {
+          submitComment();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [canSubmit]);
+
   const updateLocation = useCallback(() => {
     editor.getEditorState().read(() => {
       const selection = $getSelection();
