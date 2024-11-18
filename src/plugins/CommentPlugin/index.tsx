@@ -177,7 +177,6 @@ function PlainTextEditor({
         />
         <OnChangePlugin onChange={onChange} />
         <HistoryPlugin />
-        {autoFocus !== false && <AutoFocusPlugin />}
         <EscapeHandlerPlugin onEscape={onEscape} />
         <ClearEditorPlugin />
         {editorRef !== undefined && <EditorRefPlugin editorRef={editorRef} />}
@@ -374,6 +373,7 @@ function CommentInputBox({
     <div className="CommentPlugin_CommentInputBox" ref={boxRef}>
       <div className="comment-tags-select mb-2">
         <Select
+          autoFocus
           isMulti
           isClearable
           placeholder="Add tags..."
