@@ -10,7 +10,7 @@ import type {LexicalEditor} from 'lexical';
 
 import {Provider, TOGGLE_CONNECT_COMMAND} from '@lexical/yjs';
 import {COMMAND_PRIORITY_LOW} from 'lexical';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import {
   Array as YArray,
   Map as YMap,
@@ -453,4 +453,19 @@ export function useCommentStore(commentStore: CommentStore): Comments {
   }, [commentStore]);
 
   return comments;
+}
+
+function useOnChange(
+  setContent: (text: string) => void,
+  setCanSubmit: (canSubmit: boolean) => void,
+) {
+  return useCallback(
+    (editorState: EditorState, _editor: LexicalEditor) => {
+      editorState.read(() => {
+        setContent($rootTextContent());
+        setCanSubmit(!$isRootTextContentEmpty(_editor.isComposing(), true));
+      });
+    },
+    [setCanSubmit, setContent],
+  );
 }

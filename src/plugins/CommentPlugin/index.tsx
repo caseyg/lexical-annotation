@@ -189,15 +189,19 @@ function PlainTextEditor({
 function useOnChange(
   setContent: (text: string) => void,
   setCanSubmit: (canSubmit: boolean) => void,
+  selectedTags: MultiValue<{ label: string; value: string }>
 ) {
   return useCallback(
     (editorState: EditorState, _editor: LexicalEditor) => {
       editorState.read(() => {
-        setContent($rootTextContent());
-        setCanSubmit(!$isRootTextContentEmpty(_editor.isComposing(), true));
+        const content = $rootTextContent();
+        setContent(content);
+        const hasContent = !$isRootTextContentEmpty(_editor.isComposing(), true);
+        const hasTags = selectedTags.length > 0;
+        setCanSubmit(hasContent || hasTags);
       });
     },
-    [setCanSubmit, setContent],
+    [setCanSubmit, setContent, selectedTags]
   );
 }
 
@@ -234,6 +238,9 @@ function CommentInputBox({
     actionMeta: ActionMeta<{ label: string; value: string }>
   ) => {
     setSelectedTags(newValue);
+    const hasContent = content.trim().length > 0;
+    const hasTags = newValue.length > 0;
+    setCanSubmit(hasContent || hasTags);
   };
 
   useEffect(() => {
@@ -361,7 +368,7 @@ function CommentInputBox({
     }
   };
 
-  const onChange = useOnChange(setContent, setCanSubmit);
+  const onChange = useOnChange(setContent, setCanSubmit, selectedTags);
 
   return (
     <div className="CommentPlugin_CommentInputBox" ref={boxRef}>
