@@ -19,14 +19,15 @@ import {
   YEvent,
 } from 'yjs';
 
-export type Comment = {
+export interface Comment {
   author: string;
   content: string;
   deleted: boolean;
   id: string;
+  tags: Array<{ value: string; label: string }>;
   timeStamp: number;
   type: 'comment';
-};
+}
 
 export type Thread = {
   comments: Array<Comment>;
@@ -47,21 +48,21 @@ function createUID(): string {
 export function createComment(
   content: string,
   author: string,
-  id?: string,
-  timeStamp?: number,
-  deleted?: boolean,
+  tags: Array<{ value: string; label: string }> = []
 ): Comment {
   return {
     author,
     content,
-    deleted: deleted === undefined ? false : deleted,
-    id: id === undefined ? createUID() : id,
-    timeStamp:
-      timeStamp === undefined
-        ? performance.timeOrigin + performance.now()
-        : timeStamp,
-    type: 'comment',
+    deleted: false,
+    id: generateID(),
+    tags,
+    timeStamp: Date.now(),
+    type: 'comment' as const,
   };
+}
+
+function generateID(): string {
+  return Math.random().toString(36).substring(2, 8);
 }
 
 export function createThread(
@@ -92,6 +93,7 @@ function markDeleted(comment: Comment): Comment {
     content: '[Deleted Comment]',
     deleted: true,
     id: comment.id,
+    tags: comment.tags,
     timeStamp: comment.timeStamp,
     type: 'comment',
   };

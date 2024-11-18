@@ -53,6 +53,9 @@ import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import * as React from 'react';
 import {createPortal} from 'react-dom';
 import useLayoutEffect from 'shared/useLayoutEffect';
+import Select from 'react-select/creatable';
+import { ActionMeta, MultiValue } from 'react-select';
+import {format} from 'date-fns';
 
 import {
   Comment,
@@ -214,6 +217,7 @@ function CommentInputBox({
 }) {
   const [content, setContent] = useState('');
   const [canSubmit, setCanSubmit] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<MultiValue<{ label: string; value: string }>>([]);
   const boxRef = useRef<HTMLDivElement>(null);
   const selectionState = useMemo(
     () => ({
@@ -224,6 +228,13 @@ function CommentInputBox({
   );
   const selectionRef = useRef<RangeSelection | null>(null);
   const author = useCollabAuthorName();
+
+  const handleTagChange = (
+    newValue: MultiValue<{ label: string; value: string }>,
+    actionMeta: ActionMeta<{ label: string; value: string }>
+  ) => {
+    setSelectedTags(newValue);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -341,7 +352,7 @@ function CommentInputBox({
         quote = quote.slice(0, 99) + '…';
       }
       submitAddComment(
-        createThread(quote, [createComment(content, author)]),
+        createThread(quote, [createComment(content, author, Array.from(selectedTags))]),
         true,
         undefined,
         selectionRef.current,
@@ -354,6 +365,39 @@ function CommentInputBox({
 
   return (
     <div className="CommentPlugin_CommentInputBox" ref={boxRef}>
+      <div className="comment-tags-select mb-2">
+        <Select
+          isMulti
+          isClearable
+          placeholder="Add tags..."
+          value={selectedTags}
+          onChange={handleTagChange}
+          className="basic-multi-select"
+          classNamePrefix="select"
+          options={[
+            { value: 'bug', label: 'Bug' },
+            { value: 'feature', label: 'Feature' },
+            { value: 'enhancement', label: 'Enhancement' },
+            { value: 'documentation', label: 'Documentation' },
+          ]}
+          styles={{
+            control: (base) => ({
+              ...base,
+              minHeight: '32px',
+              backgroundColor: 'var(--background)',
+              borderColor: 'var(--border)',
+            }),
+            menu: (base) => ({
+              ...base,
+              backgroundColor: 'var(--background)',
+            }),
+            option: (base, state) => ({
+              ...base,
+              backgroundColor: state.isFocused ? 'var(--accent)' : 'transparent',
+            }),
+          }}
+        />
+      </div>
       <PlainTextEditor
         className="CommentPlugin_CommentInputBox_Editor"
         onEscape={onEscape}
@@ -467,6 +511,14 @@ function ShowDeleteCommentOrThreadDialog({
   );
 }
 
+function getRelativeTimeString(timestamp: number, rtf: Intl.RelativeTimeFormat): string {
+  const seconds = Math.round(
+    (timestamp - (performance.timeOrigin + performance.now())) / 1000,
+  );
+  const minutes = Math.round(seconds / 60);
+  return seconds > -10 ? 'Just now' : rtf.format(minutes, 'minute');
+}
+
 function CommentsPanelListComment({
   comment,
   deleteComment,
@@ -476,16 +528,11 @@ function CommentsPanelListComment({
   comment: Comment;
   deleteComment: (
     commentOrThread: Comment | Thread,
-    // eslint-disable-next-line no-shadow
     thread?: Thread,
   ) => void;
   rtf: Intl.RelativeTimeFormat;
   thread?: Thread;
 }): JSX.Element {
-  const seconds = Math.round(
-    (comment.timeStamp - (performance.timeOrigin + performance.now())) / 1000,
-  );
-  const minutes = Math.round(seconds / 60);
   const [modal, showModal] = useModal();
 
   return (
@@ -495,15 +542,21 @@ function CommentsPanelListComment({
           {comment.author}
         </span>
         <span className="CommentPlugin_CommentsPanel_List_Comment_Time">
-          · {seconds > -10 ? 'Just now' : rtf.format(minutes, 'minute')}
+          · {getRelativeTimeString(comment.timeStamp, rtf)}
         </span>
       </div>
-      <p
-        className={
-          comment.deleted ? 'CommentPlugin_CommentsPanel_DeletedComment' : ''
-        }>
+      <p className={comment.deleted ? 'CommentPlugin_CommentsPanel_DeletedComment' : ''}>
         {comment.content}
       </p>
+      {comment.tags && comment.tags.length > 0 && (
+        <div className="CommentPlugin_CommentsPanel_List_Tags">
+          {comment.tags.map((tag) => (
+            <span key={tag.value} className="CommentPlugin_CommentsPanel_List_Tag">
+              {tag.label}
+            </span>
+          ))}
+        </div>
+      )}
       {!comment.deleted && (
         <>
           <Button

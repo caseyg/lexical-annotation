@@ -16,11 +16,37 @@ import {useLexicalEditable} from '@lexical/react/useLexicalEditable';
 import * as React from 'react';
 import {useState} from 'react';
 import {CAN_USE_DOM} from 'shared/canUseDOM';
+import Select from 'react-select/creatable';
+import { ActionMeta, MultiValue } from 'react-select';
 
 import {useSettings} from './context/SettingsContext';
 import {useSharedHistoryContext} from './context/SharedHistoryContext';
 import CommentPlugin from './plugins/CommentPlugin';
 import ContentEditable from './ui/ContentEditable';
+
+const customStyles = {
+  control: (base: any) => ({
+    ...base,
+    minHeight: '40px',
+    background: 'var(--background)',
+    borderColor: 'var(--border)',
+    '&:hover': {
+      borderColor: 'var(--border-hover)'
+    }
+  }),
+  menu: (base: any) => ({
+    ...base,
+    background: 'var(--background)',
+    border: '1px solid var(--border)'
+  }),
+  option: (base: any, state: { isFocused: boolean }) => ({
+    ...base,
+    backgroundColor: state.isFocused ? 'var(--accent)' : 'transparent',
+    '&:active': {
+      backgroundColor: 'var(--accent)'
+    }
+  })
+};
 
 export default function Editor(): JSX.Element {
   const {historyState} = useSharedHistoryContext();

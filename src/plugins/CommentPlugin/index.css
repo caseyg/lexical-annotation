@@ -454,3 +454,67 @@ i.send {
   background-image: url(../../images/icons/trash3.svg);
   transition: opacity 0.2s linear;
 }
+
+.comment-input-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background: var(--background);
+  border-radius: 6px;
+  min-width: 300px;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 80px;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.comment-tags-select {
+  width: 100%;
+}
+
+.comment-submit-button {
+  padding: 6px 12px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.comment-submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comment-submit-button:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+/* Style the react-select dropdown to match your theme */
+.basic-multi-select {
+  font-size: 14px;
+}
+
+.CommentPlugin_CommentsPanel_List_Tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.CommentPlugin_CommentsPanel_List_Tag {
+  background: var(--accent-light);
+  color: var(--text);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
