@@ -27,12 +27,7 @@ import {SharedHistoryContext} from './context/SharedHistoryContext';
 import {ToolbarContext} from './context/ToolbarContext';
 import Editor from './Editor';
 import PlaygroundNodes from './nodes/PlaygroundNodes';
-import DocsPlugin from './plugins/DocsPlugin';
-import PasteLogPlugin from './plugins/PasteLogPlugin';
 import {TableContext} from './plugins/TablePlugin';
-import TestRecorderPlugin from './plugins/TestRecorderPlugin';
-import {parseAllowedFontSize} from './plugins/ToolbarPlugin/fontSize';
-import TypingPerfPlugin from './plugins/TypingPerfPlugin';
 import Settings from './Settings';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 import {parseAllowedColor} from './ui/ColorPicker';
@@ -215,11 +210,6 @@ function App(): JSX.Element {
               <div className="editor-shell">
                 <Editor />
               </div>
-              <Settings />
-              {isDevPlayground ? <DocsPlugin /> : null}
-              {isDevPlayground ? <PasteLogPlugin /> : null}
-              {isDevPlayground ? <TestRecorderPlugin /> : null}
-              {measureTypingPerf ? <TypingPerfPlugin /> : null}
             </ToolbarContext>
           </SharedAutocompleteContext>
         </TableContext>
