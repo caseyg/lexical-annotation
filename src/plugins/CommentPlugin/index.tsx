@@ -774,9 +774,9 @@ function CommentsPanel({
 
   return (
     <div className="CommentPlugin_CommentsPanel">
-      <h2 className="CommentPlugin_CommentsPanel_Heading">Comments</h2>
+      <h2 className="CommentPlugin_CommentsPanel_Heading">Highlights</h2>
       {isEmpty ? (
-        <div className="CommentPlugin_CommentsPanel_Empty">No Comments</div>
+        <div className="CommentPlugin_CommentsPanel_Empty">No highlights yet</div>
       ) : (
         <CommentsPanelList
           activeIDs={activeIDs}

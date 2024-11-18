@@ -173,6 +173,7 @@ i.add-comment {
   right: 10px;
   background-color: #ddd;
   border-radius: 10px;
+  z-index: 100;
 }
 
 i.comments {
@@ -204,10 +205,9 @@ i.comments {
   position: fixed;
   right: 0;
   width: 300px;
-  height: calc(100% - 88px);
-  top: 88px;
+  height: 100%;
+  top: 0;
   background-color: #fff;
-  border-top-left-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   animation: show-comments 0.2s ease;
   z-index: 25;
