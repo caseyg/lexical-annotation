@@ -935,6 +935,44 @@ export default function CommentPlugin({
     );
   }, [editor, markNodeMap]);
 
+  useEffect(() => {
+    const handleMouseUp = () => {
+      editor.getEditorState().read(() => {
+        const selection = $getSelection();
+        
+        if ($isRangeSelection(selection) && !selection.isCollapsed()) {
+          // Only show if there's actual text selected
+          const selectedText = selection.getTextContent();
+          if (selectedText.trim().length > 0) {
+            setShowCommentInput(true);
+          }
+        }
+      });
+    };
+
+    // Add mouseup listener to detect when selection is complete
+    document.addEventListener('mouseup', handleMouseUp);
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [editor]);
+
+  // Keep the existing selection listener to handle clearing the comment input
+  useEffect(() => {
+    return editor.registerUpdateListener(({editorState}) => {
+      editorState.read(() => {
+        const selection = $getSelection();
+        
+        if (!$isRangeSelection(selection) || selection.isCollapsed()) {
+          // Hide comment input when selection is removed
+          setShowCommentInput(false);
+        }
+      });
+    });
+  }, [editor]);
+
   const onAddComment = () => {
     editor.dispatchCommand(INSERT_INLINE_COMMAND, undefined);
   };
