@@ -188,7 +188,7 @@ function PlainTextEditor({
 function useOnChange(
   setContent: (text: string) => void,
   setCanSubmit: (canSubmit: boolean) => void,
-  selectedTags: MultiValue<{ label: string; value: string }>
+  selectedTags?: MultiValue<{ label: string; value: string }>
 ) {
   return useCallback(
     (editorState: EditorState, _editor: LexicalEditor) => {
@@ -196,7 +196,7 @@ function useOnChange(
         const content = $rootTextContent();
         setContent(content);
         const hasContent = !$isRootTextContentEmpty(_editor.isComposing(), true);
-        const hasTags = selectedTags.length > 0;
+        const hasTags = selectedTags ? selectedTags.length > 0 : false;
         setCanSubmit(hasContent || hasTags);
       });
     },
@@ -463,7 +463,6 @@ function CommentsComposer({
   submitAddComment: (
     commentOrThread: Comment,
     isInlineComment: boolean,
-    // eslint-disable-next-line no-shadow
     thread?: Thread,
   ) => void;
   thread?: Thread;
@@ -472,8 +471,9 @@ function CommentsComposer({
   const [canSubmit, setCanSubmit] = useState(false);
   const editorRef = useRef<LexicalEditor>(null);
   const author = useCollabAuthorName();
+  const [selectedTags] = useState<MultiValue<{ label: string; value: string }>>([]);
 
-  const onChange = useOnChange(setContent, setCanSubmit);
+  const onChange = useOnChange(setContent, setCanSubmit, selectedTags);
 
   const submitComment = () => {
     if (canSubmit) {
