@@ -432,7 +432,7 @@ function CommentInputBox({
           }}
         />
       </div>
-      <PlainTextEditor
+      {/* <PlainTextEditor
         className="CommentPlugin_CommentInputBox_Editor"
         onEscape={onEscape}
         onChange={onChange}
@@ -449,7 +449,7 @@ function CommentInputBox({
           className="CommentPlugin_CommentInputBox_Button primary">
           Comment
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
